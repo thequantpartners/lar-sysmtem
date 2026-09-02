@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { ArrowRight, Zap, MessageCircle, Tag, Sparkles } from 'lucide-react';
-import confetti from 'canvas-confetti';
 import { trackPixelEvent } from '../../utils/pixel';
 
 export const StepQualifier: React.FC = () => {
@@ -40,11 +39,14 @@ export const StepQualifier: React.FC = () => {
     setUrgency(selected);
     setTimeout(() => {
       setStep(2);
-      confetti({
-        particleCount: 40,
-        spread: 60,
-        origin: { y: 0.6 },
-        colors: ['#D4AF37', '#F3E5AB', '#FFFFFF'],
+      import('canvas-confetti').then((module) => {
+        const confetti = module.default;
+        confetti({
+          particleCount: 40,
+          spread: 60,
+          origin: { y: 0.6 },
+          colors: ['#D4AF37', '#F3E5AB', '#FFFFFF'],
+        });
       });
     }, 200);
   };
@@ -53,11 +55,14 @@ export const StepQualifier: React.FC = () => {
     setPricingPlan(selected);
     setTimeout(() => {
       setStep(3);
-      confetti({
-        particleCount: 75,
-        spread: 80,
-        origin: { y: 0.65 },
-        colors: ['#D4AF37', '#F3E5AB', '#10B981', '#FFFFFF'],
+      import('canvas-confetti').then((module) => {
+        const confetti = module.default;
+        confetti({
+          particleCount: 75,
+          spread: 80,
+          origin: { y: 0.65 },
+          colors: ['#D4AF37', '#F3E5AB', '#10B981', '#FFFFFF'],
+        });
       });
     }, 200);
   };

@@ -1,4 +1,4 @@
-﻿import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Phone, Mic, Volume2 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
@@ -145,8 +145,12 @@ export const IncomingCallCard: React.FC<IncomingCallCardProps> = ({ onCallComple
           )}
           <div className="w-20 h-20 rounded-full bg-gradient-to-br from-[#F3E5AB] via-[#D4AF37] to-[#0A0C14] p-[2px] shadow-[0_0_25px_rgba(212,175,55,0.4)] overflow-hidden">
             <img
-              src="/quant-logo.png"
+              src="/quant-logo.webp"
               alt="Quant Partners"
+              width={256}
+              height={256}
+              loading="lazy"
+              decoding="async"
               className="w-full h-full object-cover rounded-full bg-[#0A0C14]"
             />
           </div>
