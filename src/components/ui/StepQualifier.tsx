@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, Zap, MessageCircle, Tag, Sparkles } from 'lucide-react';
 import confetti from 'canvas-confetti';
+import { trackPixelEvent } from '../../utils/pixel';
 
 export const StepQualifier: React.FC = () => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
@@ -62,6 +63,19 @@ export const StepQualifier: React.FC = () => {
   };
 
   const handleOpenWhatsApp = () => {
+    // Fire high-priority Meta Pixel conversion events
+    trackPixelEvent('Lead', {
+      content_name: 'Reserva WhatsApp LAR',
+      currency: 'USD',
+      value: 300,
+      timeframe: urgency,
+      plan: pricingPlan,
+    });
+    trackPixelEvent('Contact', {
+      currency: 'USD',
+      value: 300,
+    });
+
     const isSplit = pricingPlan.includes('Separar');
     const text = isSplit
       ? `Hola Kenneth! Acabo de activar la oferta de lanzamiento para mi sistema LAR.\n\n• Plazo de Entrega: ${urgency}\n• Modalidad: ${pricingPlan}\n• Tarifa Congelada: S/ 1,000 PEN ($300 USD) en lugar de S/ 3,000 PEN\n\nQuiero separar mi cupo hoy con S/ 500 PEN para asegurar la tarifa promocional.`
