@@ -38,20 +38,30 @@ export function App() {
     }
   };
 
-  // Preload subsequent screens on browser idle so transitions are instant
+  // Preload subsequent screens on user interaction or delay so transitions are instant
   useEffect(() => {
+    let preloaded = false;
     const preload = () => {
+      if (preloaded) return;
+      preloaded = true;
       import('./components/screens/Screen2Diagnosis');
       import('./components/screens/Screen3MechanismROI');
       import('./components/screens/Screen4Booking');
       import('./components/ui/LegalModal');
+      window.removeEventListener('pointerdown', preload);
+      window.removeEventListener('scroll', preload);
     };
-    if ('requestIdleCallback' in window) {
-      window.requestIdleCallback(preload);
-    } else {
-      setTimeout(preload, 1500);
-    }
+
+    window.addEventListener('pointerdown', preload, { passive: true, once: true });
+    window.addEventListener('scroll', preload, { passive: true, once: true });
+    const timer = setTimeout(preload, 5000);
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('pointerdown', preload);
+      window.removeEventListener('scroll', preload);
+    };
   }, []);
+
 
   const variants = {
     enter: (dir: number) => ({

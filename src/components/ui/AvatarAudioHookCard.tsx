@@ -77,17 +77,22 @@ export const AvatarAudioHookCard: React.FC<AvatarAudioHookCardProps> = ({ onAudi
 
   return (
     <div className="w-full max-w-[340px] aspect-[9/12] sm:aspect-[9/12.5] max-h-[370px] rounded-[28px] relative overflow-hidden border border-[#D4AF37]/35 shadow-[0_0_35px_rgba(212,175,55,0.18)] flex flex-col justify-between p-3.5 select-none group">
-      {/* Background Avatar Image with luxury filter (Ultra-optimized WebP) */}
-      <img
-        src="/avatar-kenneth.webp"
-        alt="Quant Partners"
-        width={720}
-        height={960}
-        loading="eager"
-        decoding="async"
-        fetchPriority="high"
-        className="absolute inset-0 w-full h-full object-cover object-top filter brightness-[0.92] contrast-[1.05] transition-transform duration-700 group-hover:scale-105"
-      />
+      {/* Background Avatar Image with luxury filter (Ultra-optimized Responsive WebP) */}
+      <picture>
+        <source media="(max-width: 480px)" srcSet="/avatar-kenneth-mobile.webp" type="image/webp" />
+        <source srcSet="/avatar-kenneth.webp" type="image/webp" />
+        <img
+          src="/avatar-kenneth-mobile.webp"
+          alt="Quant Partners"
+          width={380}
+          height={507}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+          className="absolute inset-0 w-full h-full object-cover object-top filter brightness-[0.92] contrast-[1.05] transition-transform duration-700 group-hover:scale-105"
+        />
+      </picture>
+
 
       {/* Cinematic Obsidian Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-t from-[#030407] via-[#030407]/40 to-[#030407]/20 pointer-events-none" />
