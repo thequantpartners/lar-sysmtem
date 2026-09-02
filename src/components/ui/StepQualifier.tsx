@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ArrowRight, Zap, MessageCircle, Tag, Lock, Unlock } from 'lucide-react';
 import { trackPixelEvent } from '../../utils/pixel';
+import { clientConfig } from '../../config/clientConfig';
 
 interface StepQualifierProps {
   isUnlocked?: boolean;
@@ -17,15 +18,15 @@ export const StepQualifier: React.FC<StepQualifierProps> = ({
   const pricingOptions = [
     {
       id: 'full',
-      title: '🔥 Pago Único: S/ 1,000 PEN ($300 USD)',
-      desc: 'Ahorras S/ 2,000 PEN del precio regular de S/ 3,000 PEN',
+      title: clientConfig.pricing.fullPriceOptionTitle,
+      desc: clientConfig.pricing.fullPriceOptionDesc,
       badge: 'Mayor Ahorro',
       highlight: true,
     },
     {
       id: 'split',
-      title: '⚡ Separar con 50%: S/ 500 PEN hoy',
-      desc: 'Congela la tarifa y abona los S/ 500 restantes al recibir el sistema',
+      title: clientConfig.pricing.splitPriceOptionTitle,
+      desc: clientConfig.pricing.splitPriceOptionDesc,
       badge: 'Flexibilidad',
       highlight: false,
     },
@@ -39,7 +40,7 @@ export const StepQualifier: React.FC<StepQualifierProps> = ({
     trackPixelEvent('InitiateCheckout', {
       content_name: 'Seleccion de Oferta LAR',
       currency: 'USD',
-      value: 300,
+      value: clientConfig.pricing.pixelConversionValueUSD,
       plan: planTitle,
     });
 
@@ -61,20 +62,21 @@ export const StepQualifier: React.FC<StepQualifierProps> = ({
     trackPixelEvent('Lead', {
       content_name: 'Reserva WhatsApp LAR',
       currency: 'USD',
-      value: 300,
+      value: clientConfig.pricing.pixelConversionValueUSD,
       plan: selectedPlan,
     });
     trackPixelEvent('Contact', {
       currency: 'USD',
-      value: 300,
+      value: clientConfig.pricing.pixelConversionValueUSD,
     });
 
     const isSplit = selectedPlan.includes('50%');
     const text = isSplit
-      ? `Hola Kenneth! Acabo de escuchar la auditoría y quiero congelar mi cupo para el Sistema LAR con la modalidad del 50% (S/ 500 PEN hoy + S/ 500 al entregar).\n\n• Tarifa Promocional: S/ 1,000 PEN ($300 USD) en lugar de S/ 3,000 PEN.\n\n¿Cómo coordinamos los detalles para iniciar el desarrollo?`
-      : `Hola Kenneth! Acabo de escuchar la auditoría y quiero asegurar mi cupo para el Sistema LAR con Pago Único promocional de S/ 1,000 PEN ($300 USD).\n\n• Descuento Aplicado: Ahorro de S/ 2,000 PEN del precio regular.\n\n¿Cuáles son los pasos para agendar la sesión de arquitectura privada?`;
+      ? clientConfig.whatsapp.customMessageSplit
+      : clientConfig.whatsapp.customMessageFull;
 
-    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    const phone = clientConfig.whatsapp.phoneNumber ? clientConfig.whatsapp.phoneNumber : '';
+    const whatsappUrl = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
     window.open(whatsappUrl, '_blank');
   };
 
@@ -121,18 +123,19 @@ export const StepQualifier: React.FC<StepQualifierProps> = ({
               <div className="flex items-center justify-between">
                 <div>
                   <span className="text-[9.5px] font-mono text-slate-400 uppercase">Tarifa Regular:</span>
-                  <div className="text-xs font-mono text-slate-500 line-through">S/ 3,000 PEN ($850 USD)</div>
+                  <div className="text-xs font-mono text-slate-500 line-through">{clientConfig.pricing.regularPriceText}</div>
                 </div>
                 <div className="text-right">
                   <span className="text-[9px] font-mono text-[#F3E5AB] font-semibold uppercase bg-[#D4AF37]/20 px-2 py-0.5 rounded-full">
                     Lanzamiento
                   </span>
                   <div className="text-base font-mono font-bold text-[#F3E5AB] mt-0.5">
-                    S/ 1,000 PEN <span className="text-xs font-normal text-slate-300">($300 USD)</span>
+                    {clientConfig.pricing.launchPriceText.split(' (')[0]} <span className="text-xs font-normal text-slate-300">{clientConfig.pricing.launchPriceText.includes('(') ? `(${clientConfig.pricing.launchPriceText.split('(')[1]}` : ''}</span>
                   </div>
                 </div>
               </div>
             </div>
+
 
             <p className="text-[11px] text-slate-300 font-light text-left mt-2">
               Toca tu modalidad preferida para congelar tu cupo:
