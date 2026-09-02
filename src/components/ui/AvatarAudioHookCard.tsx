@@ -13,6 +13,11 @@ export const AvatarAudioHookCard: React.FC<AvatarAudioHookCardProps> = ({ onAudi
   const [isCompleted, setIsCompleted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const onAudioCompleteRef = useRef(onAudioComplete);
+  useEffect(() => {
+    onAudioCompleteRef.current = onAudioComplete;
+  });
+
   useEffect(() => {
     const audio = new Audio('/audio-section-1.mp3');
     audioRef.current = audio;
@@ -30,7 +35,7 @@ export const AvatarAudioHookCard: React.FC<AvatarAudioHookCardProps> = ({ onAudi
     const handleEnded = () => {
       setIsPlaying(false);
       setIsCompleted(true);
-      onAudioComplete();
+      if (onAudioCompleteRef.current) onAudioCompleteRef.current();
     };
 
     audio.addEventListener('loadedmetadata', handleLoadedMetadata);
@@ -43,7 +48,8 @@ export const AvatarAudioHookCard: React.FC<AvatarAudioHookCardProps> = ({ onAudi
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [onAudioComplete]);
+  }, []);
+
 
   const togglePlay = () => {
     if (!audioRef.current) return;

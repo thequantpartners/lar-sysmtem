@@ -12,6 +12,11 @@ export const MechanismAudioCard: React.FC<MechanismAudioCardProps> = ({ onAudioC
   const [isCompleted, setIsCompleted] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const onAudioCompleteRef = useRef(onAudioComplete);
+  useEffect(() => {
+    onAudioCompleteRef.current = onAudioComplete;
+  });
+
   useEffect(() => {
     const audio = new Audio('/audio-section-3.mp3');
     audioRef.current = audio;
@@ -29,7 +34,7 @@ export const MechanismAudioCard: React.FC<MechanismAudioCardProps> = ({ onAudioC
     const handleEnded = () => {
       setIsPlaying(false);
       setIsCompleted(true);
-      onAudioComplete();
+      if (onAudioCompleteRef.current) onAudioCompleteRef.current();
     };
 
     audio.addEventListener('loadedmetadata', handleLoadedMetadata);
@@ -42,7 +47,8 @@ export const MechanismAudioCard: React.FC<MechanismAudioCardProps> = ({ onAudioC
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [onAudioComplete]);
+  }, []);
+
 
   const togglePlay = () => {
     if (!audioRef.current) return;

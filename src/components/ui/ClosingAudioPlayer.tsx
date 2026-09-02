@@ -12,6 +12,14 @@ export const ClosingAudioPlayer: React.FC<ClosingAudioPlayerProps> = ({ onAudioC
   const [duration, setDuration] = useState(20);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
+  const onCompleteRef = useRef(onAudioComplete);
+  const onProgressRef = useRef(onProgress);
+
+  useEffect(() => {
+    onCompleteRef.current = onAudioComplete;
+    onProgressRef.current = onProgress;
+  });
+
   useEffect(() => {
     const audio = new Audio('/audio-section-4.mp3');
     audioRef.current = audio;
@@ -26,14 +34,14 @@ export const ClosingAudioPlayer: React.FC<ClosingAudioPlayerProps> = ({ onAudioC
       setCurrentTime(audio.currentTime);
       if (audio.duration) {
         const percent = Math.min(100, Math.round((audio.currentTime / audio.duration) * 100));
-        if (onProgress) onProgress(percent, percent >= 98);
+        if (onProgressRef.current) onProgressRef.current(percent, percent >= 98);
       }
     };
 
     const handleEnded = () => {
       setIsPlaying(false);
-      if (onProgress) onProgress(100, true);
-      if (onAudioComplete) onAudioComplete();
+      if (onProgressRef.current) onProgressRef.current(100, true);
+      if (onCompleteRef.current) onCompleteRef.current();
     };
 
     audio.addEventListener('loadedmetadata', handleLoadedMetadata);
@@ -46,7 +54,8 @@ export const ClosingAudioPlayer: React.FC<ClosingAudioPlayerProps> = ({ onAudioC
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [onAudioComplete, onProgress]);
+  }, []);
+
 
 
   const togglePlay = () => {
