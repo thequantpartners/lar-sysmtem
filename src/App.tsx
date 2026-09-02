@@ -12,8 +12,31 @@ const Screen4Booking = lazy(() => import('./components/screens/Screen4Booking').
 const LegalModal = lazy(() => import('./components/ui/LegalModal').then(m => ({ default: m.LegalModal })));
 
 export function App() {
-  const [currentScreen, setCurrentScreen] = useState<ScreenId>(1);
+  const [currentScreen, setCurrentScreen] = useState<ScreenId>(() => {
+    try {
+      const saved = sessionStorage.getItem('lar_active_screen');
+      if (saved) {
+        const parsed = parseInt(saved, 10);
+        if (parsed >= 1 && parsed <= 4) {
+          return parsed as ScreenId;
+        }
+      }
+    } catch {
+      // ignore in incognito or restricted environments
+    }
+    return 1;
+  });
   const [direction, setDirection] = useState<1 | -1>(1);
+
+  // Sincronizar estado silencioso en sessionStorage para preservar la sesión en recargas
+  useEffect(() => {
+    try {
+      sessionStorage.setItem('lar_active_screen', String(currentScreen));
+    } catch {
+      // ignore
+    }
+  }, [currentScreen]);
+
 
   useEffect(() => {
     if (currentScreen === 1) {
