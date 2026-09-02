@@ -3,9 +3,10 @@ import { Play, Pause, Sparkles } from 'lucide-react';
 
 interface ClosingAudioPlayerProps {
   onAudioComplete?: () => void;
+  onProgress?: (percent: number, completed: boolean) => void;
 }
 
-export const ClosingAudioPlayer: React.FC<ClosingAudioPlayerProps> = ({ onAudioComplete }) => {
+export const ClosingAudioPlayer: React.FC<ClosingAudioPlayerProps> = ({ onAudioComplete, onProgress }) => {
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
   const [duration, setDuration] = useState(20);
@@ -23,10 +24,15 @@ export const ClosingAudioPlayer: React.FC<ClosingAudioPlayerProps> = ({ onAudioC
 
     const handleTimeUpdate = () => {
       setCurrentTime(audio.currentTime);
+      if (audio.duration) {
+        const percent = Math.min(100, Math.round((audio.currentTime / audio.duration) * 100));
+        if (onProgress) onProgress(percent, percent >= 98);
+      }
     };
 
     const handleEnded = () => {
       setIsPlaying(false);
+      if (onProgress) onProgress(100, true);
       if (onAudioComplete) onAudioComplete();
     };
 
@@ -40,7 +46,8 @@ export const ClosingAudioPlayer: React.FC<ClosingAudioPlayerProps> = ({ onAudioC
       audio.removeEventListener('timeupdate', handleTimeUpdate);
       audio.removeEventListener('ended', handleEnded);
     };
-  }, [onAudioComplete]);
+  }, [onAudioComplete, onProgress]);
+
 
   const togglePlay = () => {
     if (!audioRef.current) return;

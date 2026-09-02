@@ -1,9 +1,24 @@
-﻿import React from 'react';
+import React, { useState } from 'react';
 import { ShieldCheck, Sparkles } from 'lucide-react';
 import { StepQualifier } from '../ui/StepQualifier';
 import { ClosingAudioPlayer } from '../ui/ClosingAudioPlayer';
 
 export const Screen4Booking: React.FC = () => {
+  const [audioProgress, setAudioProgress] = useState(0);
+  const [isUnlocked, setIsUnlocked] = useState(false);
+
+  const handleAudioProgress = (percent: number, completed: boolean) => {
+    setAudioProgress(percent);
+    if (completed && !isUnlocked) {
+      setIsUnlocked(true);
+    }
+  };
+
+  const handleAudioComplete = () => {
+    setAudioProgress(100);
+    setIsUnlocked(true);
+  };
+
   return (
     <div className="flex-1 flex flex-col justify-between items-center text-center px-4 pt-5 pb-3 select-none h-full overflow-hidden">
       {/* Top Header */}
@@ -20,13 +35,16 @@ export const Screen4Booking: React.FC = () => {
       </div>
 
       {/* Audio Player for Closing / Booking */}
-      <div className="w-full my-1.5 shrink-0">
-        <ClosingAudioPlayer />
+      <div className="w-full my-1 shrink-0">
+        <ClosingAudioPlayer
+          onProgress={handleAudioProgress}
+          onAudioComplete={handleAudioComplete}
+        />
       </div>
 
       {/* Main Qualifier Container */}
-      <div className="card-luxury rounded-2xl p-3 w-full flex-1 max-h-[360px] flex flex-col justify-between border border-white/[0.1] shadow-2xl overflow-hidden">
-        <StepQualifier />
+      <div className="card-luxury rounded-2xl p-3 w-full flex-1 max-h-[360px] flex flex-col justify-between border border-white/[0.1] shadow-2xl overflow-hidden relative">
+        <StepQualifier isUnlocked={isUnlocked} audioProgress={audioProgress} />
       </div>
 
       {/* Footer Security Badges */}
@@ -39,3 +57,4 @@ export const Screen4Booking: React.FC = () => {
     </div>
   );
 };
+

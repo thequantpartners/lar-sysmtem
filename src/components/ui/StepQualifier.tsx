@@ -1,8 +1,16 @@
 import React, { useState } from 'react';
-import { ArrowRight, Zap, MessageCircle, Tag, Sparkles } from 'lucide-react';
+import { ArrowRight, Zap, MessageCircle, Tag, Sparkles, Lock, Unlock } from 'lucide-react';
 import { trackPixelEvent } from '../../utils/pixel';
 
-export const StepQualifier: React.FC = () => {
+interface StepQualifierProps {
+  isUnlocked?: boolean;
+  audioProgress?: number;
+}
+
+export const StepQualifier: React.FC<StepQualifierProps> = ({
+  isUnlocked = false,
+  audioProgress = 0,
+}) => {
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [urgency, setUrgency] = useState<string>('');
   const [pricingPlan, setPricingPlan] = useState<string>('');
@@ -36,6 +44,7 @@ export const StepQualifier: React.FC = () => {
   ];
 
   const handleSelectUrgency = (selected: string) => {
+    if (!isUnlocked) return;
     setUrgency(selected);
     setTimeout(() => {
       setStep(2);
@@ -94,38 +103,76 @@ export const StepQualifier: React.FC = () => {
     <div className="w-full flex flex-col justify-between h-full">
       {/* PASO 1: URGENCIA FORZADA DE ACCIÓN PRESENTE */}
       {step === 1 && (
-        <div className="flex flex-col gap-2 animate-fadeIn">
-          <div className="flex items-center justify-between">
-            <span className="text-[10px] font-mono tracking-widest text-[#D4AF37] uppercase">Paso 1 de 2: Plazo de Lanzamiento</span>
-            <span className="text-[10px] font-mono text-slate-500">50%</span>
+        <div className="flex flex-col gap-1.5 animate-fadeIn">
+          {/* Progress / Unlock Gateway Header */}
+          {!isUnlocked ? (
+            <div className="w-full bg-[#030407]/90 border border-[#D4AF37]/35 rounded-xl p-2 flex flex-col gap-1 shadow-[0_0_18px_rgba(212,175,55,0.12)]">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5 text-[10px] font-mono text-[#F3E5AB] font-semibold">
+                  <Lock className="w-3.5 h-3.5 text-[#D4AF37] animate-pulse" />
+                  <span>Desbloqueando formulario...</span>
+                </div>
+                <span className="text-[10px] font-mono text-[#D4AF37] font-bold">{audioProgress}%</span>
+              </div>
+              <div className="w-full h-1.5 bg-white/[0.08] rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-gradient-to-r from-[#D4AF37] via-[#F3E5AB] to-emerald-400 transition-all duration-300 rounded-full"
+                  style={{ width: `${Math.max(5, audioProgress)}%` }}
+                />
+              </div>
+              <span className="text-[8.5px] text-slate-400 font-mono text-left">
+                Escucha el audio de cierre para habilitar tus opciones
+              </span>
+            </div>
+          ) : (
+            <div className="w-full bg-emerald-950/40 border border-emerald-500/40 rounded-xl px-2.5 py-1.5 flex items-center justify-between text-emerald-400 animate-fadeIn">
+              <div className="flex items-center gap-1.5 text-[10.5px] font-mono font-bold">
+                <Unlock className="w-3.5 h-3.5 text-emerald-400" />
+                <span>¡Cupo y Opciones Desbloqueadas! ✓</span>
+              </div>
+              <span className="text-[8.5px] font-mono bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full uppercase">
+                Activo
+              </span>
+            </div>
+          )}
+
+          <div className="flex items-center justify-between pt-0.5">
+            <span className="text-[9.5px] font-mono tracking-widest text-[#D4AF37] uppercase">Paso 1 de 2: Plazo de Entrega</span>
+            <span className="text-[9.5px] font-mono text-slate-500">50%</span>
           </div>
 
-          <p className="text-xs text-slate-300 font-light text-left">
+          <p className="text-[11px] text-slate-300 font-light text-left leading-tight">
             ¿En qué plazo necesitas tener activo tu sistema LAR para captar clientes?
           </p>
 
-          <div className="flex flex-col gap-2 mt-1">
+          <div className="flex flex-col gap-1.5 mt-0.5">
             {urgencyOptions.map((item) => (
               <button
                 key={item.id}
                 onClick={() => handleSelectUrgency(item.title)}
+                disabled={!isUnlocked}
                 aria-label={`Seleccionar plazo de entrega: ${item.title}`}
-                className="w-full text-left p-3 rounded-xl bg-white/[0.03] hover:bg-[#D4AF37]/10 border border-white/[0.08] hover:border-[#D4AF37]/40 transition-all flex items-center justify-between group active:scale-[0.98] cursor-pointer"
+                className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between group ${
+                  isUnlocked
+                    ? 'bg-white/[0.04] hover:bg-[#D4AF37]/15 border-white/[0.1] hover:border-[#D4AF37]/50 active:scale-[0.98] cursor-pointer shadow-md'
+                    : 'bg-white/[0.01] border-white/[0.05] opacity-50 cursor-not-allowed pointer-events-none'
+                }`}
               >
                 <div>
-                  <div className="text-xs font-semibold text-white group-hover:text-[#F3E5AB]">
+                  <div className={`text-xs font-semibold ${isUnlocked ? 'text-white group-hover:text-[#F3E5AB]' : 'text-slate-400'}`}>
                     {item.title}
                   </div>
-                  <div className="text-[10px] text-slate-400 font-light mt-0.5">
+                  <div className="text-[9.5px] text-slate-400 font-light mt-0.5">
                     {item.desc}
                   </div>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-500 group-hover:text-[#D4AF37] group-hover:translate-x-0.5 transition-all shrink-0 ml-2" />
+                <ArrowRight className={`w-3.5 h-3.5 transition-all shrink-0 ml-2 ${isUnlocked ? 'text-slate-500 group-hover:text-[#D4AF37] group-hover:translate-x-0.5' : 'text-slate-600'}`} />
               </button>
             ))}
           </div>
         </div>
       )}
+
 
       {/* PASO 2: OFERTA ACTIVADA CON ANCLAJE DE PRECIO */}
       {step === 2 && (
