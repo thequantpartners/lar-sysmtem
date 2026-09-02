@@ -61,7 +61,7 @@ export function App() {
     }
   };
 
-  // Preload subsequent screens on user interaction or delay so transitions are instant
+  // Preload subsequent screens on user interaction so transitions are instant
   useEffect(() => {
     let preloaded = false;
     const preload = () => {
@@ -72,15 +72,16 @@ export function App() {
       import('./components/screens/Screen4Booking');
       import('./components/ui/LegalModal');
       window.removeEventListener('pointerdown', preload);
+      window.removeEventListener('touchstart', preload);
       window.removeEventListener('scroll', preload);
     };
 
     window.addEventListener('pointerdown', preload, { passive: true, once: true });
+    window.addEventListener('touchstart', preload, { passive: true, once: true });
     window.addEventListener('scroll', preload, { passive: true, once: true });
-    const timer = setTimeout(preload, 5000);
     return () => {
-      clearTimeout(timer);
       window.removeEventListener('pointerdown', preload);
+      window.removeEventListener('touchstart', preload);
       window.removeEventListener('scroll', preload);
     };
   }, []);

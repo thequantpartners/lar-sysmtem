@@ -12,8 +12,8 @@
 
 
     <!-- Preload Critical Self-Hosted Latin Fonts (0 Latency) -->
-    <link rel="preload" href="/fonts/font-38.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="/fonts/font-5.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/font-6.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/font-40.woff2" as="font" type="font/woff2" crossorigin />
 
 
     <!-- Meta Pixel Code (Smart Interactive Lazy Loading) -->
@@ -30,16 +30,15 @@
         t=b.createElement(e);t.async=!0;
         t.src=v;s=b.getElementsByTagName(e)[0];
         s.parentNode.insertBefore(t,s);
-        window.removeEventListener('scroll', loadPixel, {passive:true});
-        window.removeEventListener('touchstart', loadPixel, {passive:true});
-        window.removeEventListener('click', loadPixel, {passive:true});
-        window.removeEventListener('mousemove', loadPixel, {passive:true});
+        var evs = ['scroll', 'touchstart', 'click', 'mousemove', 'pointerdown'];
+        for (var i = 0; i < evs.length; i++) {
+          window.removeEventListener(evs[i], loadPixel, {passive:true});
+        }
       }
-      window.addEventListener('scroll', loadPixel, {passive:true, once:true});
-      window.addEventListener('touchstart', loadPixel, {passive:true, once:true});
-      window.addEventListener('click', loadPixel, {passive:true, once:true});
-      window.addEventListener('mousemove', loadPixel, {passive:true, once:true});
-      setTimeout(loadPixel, 4000);
+      var evs = ['scroll', 'touchstart', 'click', 'mousemove', 'pointerdown'];
+      for (var i = 0; i < evs.length; i++) {
+        window.addEventListener(evs[i], loadPixel, {passive:true, once:true});
+      }
       }(window, document,'script',
       'https://connect.facebook.net/en_US/fbevents.js');
       fbq('init', '1481108957086201');
