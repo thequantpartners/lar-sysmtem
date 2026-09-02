@@ -109,7 +109,8 @@ export const StepQualifier: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => handleSelectUrgency(item.title)}
-                className="w-full text-left p-3 rounded-xl bg-white/[0.03] hover:bg-[#D4AF37]/10 border border-white/[0.08] hover:border-[#D4AF37]/40 transition-all flex items-center justify-between group active:scale-[0.98]"
+                aria-label={`Seleccionar plazo de entrega: ${item.title}`}
+                className="w-full text-left p-3 rounded-xl bg-white/[0.03] hover:bg-[#D4AF37]/10 border border-white/[0.08] hover:border-[#D4AF37]/40 transition-all flex items-center justify-between group active:scale-[0.98] cursor-pointer"
               >
                 <div>
                   <div className="text-xs font-semibold text-white group-hover:text-[#F3E5AB]">
@@ -163,7 +164,8 @@ export const StepQualifier: React.FC = () => {
               <button
                 key={item.id}
                 onClick={() => handleSelectPricing(item.title)}
-                className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between group active:scale-[0.98] ${
+                aria-label={`Seleccionar modalidad de pago: ${item.title}`}
+                className={`w-full text-left p-2.5 rounded-xl border transition-all flex items-center justify-between group active:scale-[0.98] cursor-pointer ${
                   item.highlight
                     ? 'bg-[#D4AF37]/10 border-[#D4AF37]/50 hover:bg-[#D4AF37]/20'
                     : 'bg-white/[0.03] border-white/[0.08] hover:bg-white/[0.06]'
@@ -219,7 +221,8 @@ export const StepQualifier: React.FC = () => {
           <div className="w-full mt-2.5">
             <button
               onClick={handleOpenWhatsApp}
-              className="w-full h-12 rounded-full bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-700 hover:from-emerald-400 hover:to-teal-600 text-white font-semibold flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(16,185,129,0.6)] active:scale-98 transition-all"
+              aria-label="Reclamar oferta y abrir chat de WhatsApp con Quant Partners"
+              className="w-full h-12 rounded-full bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-700 hover:from-emerald-400 hover:to-teal-600 text-white font-semibold flex items-center justify-center gap-2 text-xs uppercase tracking-wider shadow-[0_0_25px_rgba(16,185,129,0.6)] active:scale-98 transition-all cursor-pointer"
             >
               <MessageCircle className="w-4 h-4 fill-white" />
               <span>Reclamar Oferta en WhatsApp</span>
@@ -233,3 +236,4 @@ export const StepQualifier: React.FC = () => {
     </div>
   );
 };
+

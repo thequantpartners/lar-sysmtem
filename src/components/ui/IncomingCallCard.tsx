@@ -210,6 +210,7 @@ export const IncomingCallCard: React.FC<IncomingCallCardProps> = ({ onCallComple
 
             <motion.button
               onClick={handleAnswer}
+              aria-label="Contestar llamada estratégica de Quant Partners"
               animate={{
                 scale: [1, 1.05, 1],
                 boxShadow: [

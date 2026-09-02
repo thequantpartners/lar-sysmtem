@@ -125,6 +125,7 @@ export const MechanismAudioCard: React.FC<MechanismAudioCardProps> = ({ onAudioC
       <div className="py-3 flex items-center gap-3 bg-black/40 rounded-2xl px-3 my-2 border border-white/[0.04]">
         <button
           onClick={togglePlay}
+          aria-label={isPlaying ? 'Pausar explicación del mecanismo' : 'Reproducir explicación del mecanismo'}
           className="w-11 h-11 rounded-full bg-gradient-to-br from-[#F3E5AB] via-[#D4AF37] to-[#997A15] flex items-center justify-center text-[#030407] shadow-[0_0_20px_rgba(212,175,55,0.4)] shrink-0 hover:scale-105 active:scale-95 transition-transform cursor-pointer"
         >
           {isPlaying ? (

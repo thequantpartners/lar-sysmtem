@@ -91,6 +91,7 @@ export const ClosingAudioPlayer: React.FC<ClosingAudioPlayerProps> = ({ onAudioC
     <div className="w-full card-luxury rounded-2xl p-2.5 px-3 border border-[#D4AF37]/30 flex items-center justify-between gap-2.5 shadow-lg bg-[#0A0C14]/90">
       <button
         onClick={togglePlay}
+        aria-label={isPlaying ? 'Pausar nota de cierre' : 'Reproducir nota de cierre'}
         className="w-8 h-8 rounded-full bg-gradient-to-br from-[#F3E5AB] via-[#D4AF37] to-[#997A15] flex items-center justify-center text-[#030407] shadow-[0_0_12px_rgba(212,175,55,0.4)] shrink-0 hover:scale-105 active:scale-95 transition-transform cursor-pointer"
       >
         {isPlaying ? (

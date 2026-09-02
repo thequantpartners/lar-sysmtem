@@ -113,6 +113,7 @@ export const AvatarAudioHookCard: React.FC<AvatarAudioHookCardProps> = ({ onAudi
             whileHover={{ scale: 1.08 }}
             whileTap={{ scale: 0.94 }}
             onClick={togglePlay}
+            aria-label="Reproducir mensaje de audio de Quant Partners"
             className="w-16 h-16 rounded-full bg-gradient-to-br from-[#F3E5AB] via-[#D4AF37] to-[#997A15] flex items-center justify-center text-[#030407] shadow-[0_0_25px_rgba(212,175,55,0.6)] cursor-pointer"
           >
             <Play className="w-7 h-7 fill-[#030407] ml-1" />
@@ -139,6 +140,7 @@ export const AvatarAudioHookCard: React.FC<AvatarAudioHookCardProps> = ({ onAudi
 
           <button
             onClick={togglePlay}
+            aria-label={isPlaying ? 'Pausar audio de diagnóstico' : 'Reproducir audio de diagnóstico'}
             className="w-8 h-8 rounded-full bg-gradient-to-r from-[#F3E5AB] to-[#D4AF37] flex items-center justify-center text-[#030407] shadow-md hover:scale-105 active:scale-95 transition-transform cursor-pointer"
           >
             {isPlaying ? (

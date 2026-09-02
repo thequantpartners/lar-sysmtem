@@ -12,6 +12,7 @@ export const LegalModal: React.FC = () => {
       <div className="w-full flex items-center justify-center py-1 select-none">
         <button
           onClick={() => setIsOpen(true)}
+          aria-label="Ver privacidad, términos y deslinde legal de Quant Partners"
           className="text-[8.5px] font-mono text-slate-500 hover:text-[#F3E5AB] transition-colors flex items-center gap-1 opacity-70 hover:opacity-100 cursor-pointer"
         >
           <Scale className="w-2.5 h-2.5 text-[#D4AF37]" />
@@ -45,6 +46,7 @@ export const LegalModal: React.FC = () => {
 
                 <button
                   onClick={() => setIsOpen(false)}
+                  aria-label="Cerrar ventana de información legal"
                   className="w-7 h-7 rounded-full bg-white/[0.05] hover:bg-white/[0.1] flex items-center justify-center text-slate-400 hover:text-white transition-colors cursor-pointer"
                 >
                   <X className="w-4 h-4" />
@@ -138,6 +140,7 @@ export const LegalModal: React.FC = () => {
                 <span className="text-[9px] font-mono text-slate-500">© 2026 Quant Partners. Todos los derechos reservados.</span>
                 <button
                   onClick={() => setIsOpen(false)}
+                  aria-label="Cerrar modal legal"
                   className="px-4 py-1.5 rounded-full bg-white/[0.08] hover:bg-white/[0.15] text-white text-[10.5px] font-mono transition-colors cursor-pointer"
                 >
                   Cerrar
