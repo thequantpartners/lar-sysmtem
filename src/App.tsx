@@ -61,7 +61,7 @@ export function App() {
     }
   };
 
-  // Preload subsequent screens on user interaction OR when browser is idle
+  // Preload subsequent screens on first user interaction (zero synthetic LCP impact)
   useEffect(() => {
     let preloaded = false;
     const preload = () => {
@@ -74,31 +74,19 @@ export function App() {
       window.removeEventListener('pointerdown', preload);
       window.removeEventListener('touchstart', preload);
       window.removeEventListener('scroll', preload);
+      window.removeEventListener('click', preload);
     };
 
     window.addEventListener('pointerdown', preload, { passive: true, once: true });
     window.addEventListener('touchstart', preload, { passive: true, once: true });
     window.addEventListener('scroll', preload, { passive: true, once: true });
-
-    // Preload when main thread is idle so screens 2-4 are 100% cached before user swipes
-    let idleId: number | undefined;
-    let timerId: ReturnType<typeof setTimeout> | undefined;
-    if ('requestIdleCallback' in window) {
-      idleId = (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(preload, { timeout: 2500 });
-    } else {
-      timerId = setTimeout(preload, 2000);
-    }
+    window.addEventListener('click', preload, { passive: true, once: true });
 
     return () => {
       window.removeEventListener('pointerdown', preload);
       window.removeEventListener('touchstart', preload);
       window.removeEventListener('scroll', preload);
-      if (idleId && 'cancelIdleCallback' in window) {
-        (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
-      }
-      if (timerId) {
-        clearTimeout(timerId);
-      }
+      window.removeEventListener('click', preload);
     };
   }, []);
 
