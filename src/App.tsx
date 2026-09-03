@@ -61,7 +61,7 @@ export function App() {
     }
   };
 
-  // Preload subsequent screens on user interaction so transitions are instant
+  // Preload subsequent screens on user interaction OR when browser is idle
   useEffect(() => {
     let preloaded = false;
     const preload = () => {
@@ -79,13 +79,28 @@ export function App() {
     window.addEventListener('pointerdown', preload, { passive: true, once: true });
     window.addEventListener('touchstart', preload, { passive: true, once: true });
     window.addEventListener('scroll', preload, { passive: true, once: true });
+
+    // Preload when main thread is idle so screens 2-4 are 100% cached before user swipes
+    let idleId: number | undefined;
+    let timerId: ReturnType<typeof setTimeout> | undefined;
+    if ('requestIdleCallback' in window) {
+      idleId = (window as unknown as { requestIdleCallback: (cb: () => void, opts?: { timeout: number }) => number }).requestIdleCallback(preload, { timeout: 2500 });
+    } else {
+      timerId = setTimeout(preload, 2000);
+    }
+
     return () => {
       window.removeEventListener('pointerdown', preload);
       window.removeEventListener('touchstart', preload);
       window.removeEventListener('scroll', preload);
+      if (idleId && 'cancelIdleCallback' in window) {
+        (window as unknown as { cancelIdleCallback: (id: number) => void }).cancelIdleCallback(idleId);
+      }
+      if (timerId) {
+        clearTimeout(timerId);
+      }
     };
   }, []);
-
 
   const variants = {
     enter: (dir: number) => ({
@@ -125,7 +140,13 @@ export function App() {
             className="w-full flex-1 flex flex-col justify-between"
           >
             {currentScreen === 1 && <Screen1Hook onAdvance={handleNext} />}
-            <Suspense fallback={<div className="flex-1 w-full" />}>
+            <Suspense
+              fallback={
+                <div className="flex-1 w-full flex items-center justify-center">
+                  <div className="w-5 h-5 border-2 border-[#D4AF37]/20 border-t-[#D4AF37] rounded-full animate-spin" />
+                </div>
+              }
+            >
               {currentScreen === 2 && <Screen2Diagnosis onAdvance={handleNext} />}
               {currentScreen === 3 && <Screen3MechanismROI onAdvance={handleNext} />}
               {currentScreen === 4 && <Screen4Booking />}
